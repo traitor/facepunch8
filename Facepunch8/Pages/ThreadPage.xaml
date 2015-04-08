@@ -1,0 +1,245 @@
+﻿<phone:PhoneApplicationPage
+    x:Class="Facepunch8.Pages.ThreadPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="clr-namespace:Facepunch8.ViewModel"
+    xmlns:cvrt="clr-namespace:Facepunch8.Pages"
+    xmlns:utility="clr-namespace:Facepunch8.Utilities"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait" Orientation="Portrait"
+    mc:Ignorable="d"
+    shell:SystemTray.IsVisible="True">
+    <!--xmlns:msp="clr-namespace:MSPToolkit.Controls;assembly=MSPToolkit"-->
+
+    <!--<toolkit:TransitionService.NavigationInTransition>
+        <toolkit:NavigationInTransition>
+            <toolkit:NavigationInTransition.Backward>
+                <toolkit:TurnstileTransition Mode="BackwardIn" />
+            </toolkit:NavigationInTransition.Backward>
+            <toolkit:NavigationInTransition.Forward>
+                <toolkit:TurnstileTransition Mode="ForwardIn" />
+            </toolkit:NavigationInTransition.Forward>
+        </toolkit:NavigationInTransition>
+    </toolkit:TransitionService.NavigationInTransition>
+    <toolkit:TransitionService.NavigationOutTransition>
+        <toolkit:NavigationOutTransition>
+            <toolkit:NavigationOutTransition.Backward>
+                <toolkit:TurnstileTransition Mode="BackwardOut" />
+            </toolkit:NavigationOutTransition.Backward>
+            <toolkit:NavigationOutTransition.Forward>
+                <toolkit:TurnstileTransition Mode="ForwardOut" />
+            </toolkit:NavigationOutTransition.Forward>
+        </toolkit:NavigationOutTransition>
+    </toolkit:TransitionService.NavigationOutTransition>-->
+
+    <phone:PhoneApplicationPage.Resources>
+        <cvrt:DateConverter x:Key="DateConverter"/>
+        <cvrt:IntegerVisibilityConverter x:Key="ZeroVisibilityConverter" />
+        <cvrt:PageConverter x:Key="PageConverter"/>
+        <utility:PostConverter x:Key="PostConverter"/>
+
+        <DataTemplate x:Name="PostItemTemplate">
+            <Grid Grid.Row="0" Margin="0,6,-2,6">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="5" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="25" />
+                    <!-- spacing in between listings -->
+                </Grid.RowDefinitions>
+
+                <toolkit:ContextMenuService.ContextMenu>
+                    <toolkit:ContextMenu Opened="ContextMenu_Opened">
+                        <toolkit:MenuItem Header="Quote" Name="quoteButton" Click="quoteButton_Click" />
+                    </toolkit:ContextMenu>
+                </toolkit:ContextMenuService.ContextMenu>
+
+                <Grid Grid.Row="0" Margin="12,0,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="0.15*" />
+                        <ColumnDefinition Width="0.85*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                    </Grid.RowDefinitions>
+                    <Image Source="{Binding Avatar}" Height="auto" Grid.Column="0" MaxHeight="125" Grid.RowSpan="2" />
+                    <StackPanel Orientation="Vertical" Grid.Column="1" Margin="0,-8,0,0">
+                        <TextBlock Height="auto" TextWrapping="Wrap" Margin="12,0,0,0" Style="{StaticResource PhoneTextTitle2Style}" 
+                                        Text="{Binding Author}" Hold="TextBlock_Hold" />
+                        <TextBlock Height="auto" TextWrapping="Wrap" Margin="12,0,0,0" Style="{StaticResource PhoneTextSubtleStyle}" 
+                                        Text="{Binding Timestamp, Converter={StaticResource DateConverter}}" />
+                    </StackPanel>
+                </Grid>
+                <!--<TextBlock Height="auto" TextWrapping="Wrap" Grid.Row="1" Style="{StaticResource PhoneTextNormalStyle}" 
+                                    Text="{Binding PageText}" />-->
+                <!--<phone:WebBrowser Background="{StaticResource PhoneBackgroundBrush}"
+                                  Grid.Row="2" Width="456"
+                                  IsScriptEnabled="True"
+                                  ScriptNotify="WebBrowser_ScriptNotify"
+                                  utility:WebBrowserUtility.BindableSource="{Binding PageText}"
+                                  Margin="12,0,0,6"
+                                                    />-->
+                <!--IsHitTestVisible="False"-->
+                <!--<msp:HTMLTextBox Grid.Row="2" Html="{Binding HtmlText}" Hold="TextBlock_Hold" />-->
+                <ContentControl Content="{Binding PageText, Converter={StaticResource PostConverter}}" Grid.Row="2"/>
+            </Grid>
+        </DataTemplate>
+        <Style x:Key="TextBoxStyle1" TargetType="TextBox">
+            <Setter Property="FontFamily" Value="{StaticResource PhoneFontFamilyNormal}"/>
+            <Setter Property="FontSize" Value="{StaticResource PhoneFontSizeMediumLarge}"/>
+            <Setter Property="Background" Value="{StaticResource PhoneTextBoxBrush}"/>
+            <Setter Property="Foreground" Value="{StaticResource PhoneTextBoxForegroundBrush}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource PhoneTextBoxBrush}"/>
+            <Setter Property="SelectionBackground" Value="{StaticResource PhoneAccentBrush}"/>
+            <Setter Property="SelectionForeground" Value="{StaticResource PhoneTextBoxSelectionForegroundBrush}"/>
+            <Setter Property="BorderThickness" Value="{StaticResource PhoneBorderThickness}"/>
+            <Setter Property="Padding" Value="2"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Grid Background="Transparent">
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal"/>
+                                    <VisualState x:Name="MouseOver"/>
+                                    <VisualState x:Name="Disabled">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="MainBorder">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="Transparent"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="BorderBrush" Storyboard.TargetName="MainBorder">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource PhoneDisabledBrush}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentElement">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource PhoneDisabledBrush}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="ReadOnly">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="MainBorder">
+                                                <DiscreteObjectKeyFrame KeyTime="0">
+                                                    <DiscreteObjectKeyFrame.Value>
+                                                        <Visibility>Collapsed</Visibility>
+                                                    </DiscreteObjectKeyFrame.Value>
+                                                </DiscreteObjectKeyFrame>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="ReadonlyBorder">
+                                                <DiscreteObjectKeyFrame KeyTime="0">
+                                                    <DiscreteObjectKeyFrame.Value>
+                                                        <Visibility>Visible</Visibility>
+                                                    </DiscreteObjectKeyFrame.Value>
+                                                </DiscreteObjectKeyFrame>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="ReadonlyBorder">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource PhoneTextBoxBrush}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="BorderBrush" Storyboard.TargetName="ReadonlyBorder">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource PhoneTextBoxBrush}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentElement">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource PhoneTextBoxReadOnlyBrush}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                                <VisualStateGroup x:Name="FocusStates">
+                                    <VisualState x:Name="Focused">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="MainBorder">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource PhoneTextBoxEditBackgroundBrush}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="BorderBrush" Storyboard.TargetName="MainBorder">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource PhoneTextBoxEditBorderBrush}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Unfocused"/>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                            <Border x:Name="MainBorder" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Margin="{StaticResource PhoneTouchTargetOverhang}"/>
+                            <Border x:Name="ReadonlyBorder" BorderBrush="{StaticResource PhoneDisabledBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="Transparent" Margin="{StaticResource PhoneTouchTargetOverhang}" Visibility="Collapsed"/>
+                            <Border BorderBrush="Transparent" BorderThickness="{TemplateBinding BorderThickness}" Background="Transparent" Margin="{StaticResource PhoneTouchTargetOverhang}">
+                                <ScrollViewer x:Name="ContentElement" BorderThickness="0" HorizontalContentAlignment="Stretch" Margin="{StaticResource PhoneTextBoxInnerMargin}" Padding="{TemplateBinding Padding}" VerticalContentAlignment="Stretch"/>
+                            </Border>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </phone:PhoneApplicationPage.Resources>
+
+    <shell:SystemTray.ProgressIndicator>
+        <shell:ProgressIndicator IsIndeterminate="{Binding IsLoading}" 
+                             IsVisible="{Binding IsLoading}" 
+                             Text="Loading posts..." />
+    </shell:SystemTray.ProgressIndicator>
+
+    <Grid x:Name="LayoutRoot" Background="Transparent" Height="Auto">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height=".06*" />
+            <RowDefinition Height=".05*" />
+            <RowDefinition Height=".89*" />
+        </Grid.RowDefinitions>
+
+        <Rectangle Grid.Row="0" Fill="{Binding BgBrush}" Margin="0,-5,0,0" />
+        <Rectangle Grid.Row="1" Fill="{Binding BgBrush}" Margin="0,-5,0,0" />
+        <TextBlock Grid.Row="0" Text="{Binding Title}" Margin="12,-7,0,0" Style="{StaticResource PhoneTextTitle2Style}" Foreground="{Binding FgBrush}" />
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="12,0,0,0" Visibility="{Binding PageCount, Converter={StaticResource ZeroVisibilityConverter}}">
+            <TextBlock Text="{Binding CurrentPage}" Margin="0" Foreground="{Binding FgBrush}" />
+            <TextBlock Text=" out of " Margin="0" Foreground="{Binding FgBrush}" />
+            <TextBlock Text="{Binding PageCount, Converter={StaticResource PageConverter}}" Margin="0" Foreground="{Binding FgBrush}" />
+        </StackPanel>
+
+        <ListBox Grid.Row="2" x:Name="PostsList"
+            ItemTemplate="{StaticResource PostItemTemplate}"                 
+            ItemsSource="{Binding PostsCollection}"
+            ManipulationCompleted="OnManipulationCompleted" />
+
+        <Popup x:Name="jumpToPopup">
+            <Grid Width="480">
+                <StackPanel Orientation="Vertical" Background="{Binding BgBrush}">
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="12,5,0,0" Visibility="{Binding PageCount, Converter={StaticResource ZeroVisibilityConverter}}">
+                        <TextBlock Foreground="{Binding FgBrush}"  Text="Jump to page (from " Margin="0" />
+                        <TextBlock Foreground="{Binding FgBrush}" Text="{Binding CurrentPage}" Margin="0" />
+                        <TextBlock Foreground="{Binding FgBrush}" Text=" to " Margin="0" />
+                        <TextBlock Foreground="{Binding FgBrush}" Text="{Binding PageCount}" Margin="0" />
+                        <TextBlock Foreground="{Binding FgBrush}" Text="):" Margin="0" />
+                    </StackPanel>
+                    <TextBox CaretBrush="{Binding ThemeFgBrush}" BorderBrush="{Binding FgBrush}" Foreground="{Binding ThemeFgBrush}" InputScope="Number" x:Name="pageNumberTb" />
+                    <Button BorderBrush="{Binding FgBrush}" Foreground="{Binding FgBrush}" Content="Jump!" Click="JumpToClick" />
+                </StackPanel>
+            </Grid>
+        </Popup>
+
+        <Popup x:Name="postPopup">
+            <Grid Width="480">
+                <StackPanel Orientation="Vertical" Background="{Binding BgBrush}">
+                    <TextBlock Foreground="{Binding FgBrush}" Text="Message:" VerticalAlignment="Center" Margin="12,5,0,0" />
+                    <TextBox CaretBrush="{Binding ThemeFgBrush}" BorderBrush="{Binding FgBrush}" Foreground="{Binding ThemeFgBrush}" Height="230" x:Name="postContent"  AcceptsReturn="True"  InputScope="Chat" TextWrapping="Wrap" VerticalAlignment="Top" Style="{StaticResource TextBoxStyle1}"/>
+                    <Button BorderBrush="{Binding FgBrush}" Foreground="{Binding FgBrush}" Content="Post!" Click="PostMessageClick" />
+                </StackPanel>
+            </Grid>
+        </Popup>
+
+        <Popup x:Name="imagePopup">
+            <Grid>
+                <Image x:Name="PopupImage"/>
+            </Grid>
+        </Popup>
+    </Grid>
+
+</phone:PhoneApplicationPage>

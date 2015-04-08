@@ -1,0 +1,22 @@
+﻿<UserControl x:Class="Facepunch8.Pages.ThreadIcon"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    d:DesignHeight="480" d:DesignWidth="480">
+    
+    <Grid x:Name="LayoutRoot">
+        <Border Width="30" Height="105" Background="Gray">
+            <TextBlock Text="asdasd" VerticalAlignment="Bottom" HorizontalAlignment="Left" 
+                       Margin="-30,-30,0,0">
+                <TextBlock.RenderTransform>
+                    <CompositeTransform Rotation="-90" TranslateY="25" />
+                </TextBlock.RenderTransform>
+            </TextBlock>
+        </Border>
+    </Grid>
+</UserControl>
